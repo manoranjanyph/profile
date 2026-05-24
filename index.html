@@ -439,53 +439,261 @@
       opacity: 0.9;
     }
 
-    .timeline {
-      position: relative;
-      margin-top: 70px;
+    
+	/* ========================================= */
+/* PREMIUM HORIZONTAL CAREER TIMELINE FIXED */
+/* ========================================= */
+
+.timeline {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 40px;
+
+    margin-top: 70px;
+
+    overflow-x: auto;
+    overflow-y: visible; /* IMPORTANT */
+
+    padding:
+        60px   /* top */
+        40px   /* right */
+        40px   /* bottom */
+        40px;  /* left */
+
+    scrollbar-width: none;
+}
+
+.timeline::-webkit-scrollbar {
+    display: none;
+}
+
+/* ========================================= */
+/* MAIN LINE */
+/* ========================================= */
+
+.timeline::before {
+    content: '';
+
+    position: absolute;
+
+    top: 28px;
+    left: 40px;
+    right: 40px;
+
+    height: 2px;
+
+    background: rgba(255,255,255,0.08);
+
+    z-index: 0;
+}
+
+/* Glow Line */
+
+.timeline::after {
+    content: '';
+
+    position: absolute;
+
+    top: 28px;
+    left: 40px;
+    right: 40px;
+
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        rgba(255,122,0,0.25),
+        rgba(212,175,55,0.2)
+    );
+
+    filter: blur(2px);
+
+    z-index: 0;
+}
+
+/* ========================================= */
+/* TIMELINE ITEMS */
+/* ========================================= */
+
+.timeline-item {
+    position: relative;
+
+    min-width: 230px;
+
+    flex: 1;
+
+    padding-top: 70px;
+
+    transition:
+        transform 0.4s ease,
+        opacity 0.4s ease;
+}
+
+/* Hover */
+
+.timeline-item:hover {
+    transform: translateY(-8px);
+}
+
+/* ========================================= */
+/* DOT */
+/* ========================================= */
+
+.timeline-dot {
+    position: absolute;
+
+    top: 20px;
+    left: 0;
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        var(--orange),
+        var(--gold)
+    );
+
+    z-index: 2;
+
+    transition: 0.4s ease;
+
+    box-shadow:
+        0 0 0 6px rgba(255,122,0,0.08),
+        0 0 30px rgba(255,122,0,0.45);
+}
+
+/* Dot Hover */
+
+.timeline-item:hover .timeline-dot {
+
+    transform: scale(1.18);
+
+    box-shadow:
+        0 0 0 10px rgba(255,122,0,0.12),
+        0 0 40px rgba(255,122,0,0.65);
+}
+
+/* ========================================= */
+/* ACTIVE / CURRENT ROLE */
+/* ========================================= */
+
+.timeline-item.active-role .timeline-dot {
+
+    background: #00ff88;
+
+    box-shadow:
+        0 0 0 8px rgba(0,255,136,0.12),
+        0 0 35px rgba(0,255,136,0.75),
+        0 0 55px rgba(0,255,136,0.35);
+
+    animation: activePulse 2.5s infinite;
+}
+
+/* Active Animation */
+
+@keyframes activePulse {
+
+    0% {
+        transform: scale(1);
+
+        box-shadow:
+            0 0 0 0 rgba(0,255,136,0.45),
+            0 0 30px rgba(0,255,136,0.7);
     }
 
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 20px;
-      width: 2px;
-      height: 100%;
-      background: rgba(255,255,255,0.08);
+    70% {
+        transform: scale(1.12);
+
+        box-shadow:
+            0 0 0 16px rgba(0,255,136,0),
+            0 0 45px rgba(0,255,136,0.9);
+    }
+
+    100% {
+        transform: scale(1);
+
+        box-shadow:
+            0 0 0 0 rgba(0,255,136,0),
+            0 0 30px rgba(0,255,136,0.7);
+    }
+}
+
+/* ========================================= */
+/* TEXT */
+/* ========================================= */
+
+.timeline-item h3 {
+
+    font-size: 1.2rem;
+    font-weight: 800;
+
+    line-height: 1.4;
+
+    margin-bottom: 12px;
+
+    color: var(--white);
+}
+
+.timeline-item span {
+
+    display: block;
+
+    color: var(--gold);
+
+    font-size: 0.92rem;
+
+    line-height: 1.7;
+}
+
+/* ========================================= */
+/* MOBILE */
+/* ========================================= */
+
+@media(max-width: 900px) {
+
+    .timeline {
+
+        gap: 35px;
+
+        padding:
+            55px
+            25px
+            35px
+            25px;
+    }
+
+    .timeline::before,
+    .timeline::after {
+
+        left: 25px;
+        right: 25px;
     }
 
     .timeline-item {
-      position: relative;
-      padding-left: 80px;
-      margin-bottom: 55px;
-    }
 
-    .timeline-dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--orange), var(--gold));
-      position: absolute;
-      left: 12px;
-      top: 10px;
-      box-shadow: 0 0 25px rgba(255,122,0,0.5);
+        min-width: 240px;
+
+        padding-top: 65px;
     }
 
     .timeline-item h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
+
+        font-size: 1.05rem;
     }
 
     .timeline-item span {
-      display: block;
-      color: var(--gold);
-      margin-bottom: 12px;
-      font-size: 0.92rem;
-    }
 
-    .timeline-item p {
-      color: var(--gray);
-      line-height: 1.8;
+        font-size: 0.82rem;
     }
+}
+
+
 
     .cta {
       background: linear-gradient(180deg, #151515, #090909);
@@ -574,6 +782,9 @@
       }
     }
   </style>
+  
+  
+  
 </head>
 <body>
 
@@ -623,7 +834,7 @@
     <div class="hero-card animate">
       <div class="metric">
         <h2>₹40Cr+</h2>
-        <p>Marketing-sourced revenue contribution through enterprise marketing and demand generation initiatives.</p>
+        <p>Marketing-sourced revenue contribution through B2B marketing and demand generation initiatives.</p>
       </div>
 
       <div class="metric">
@@ -1053,7 +1264,7 @@
 
     <div class="timeline">
 
-      <div class="timeline-item animate">
+<div class="timeline-item active-role">
         <div class="timeline-dot"></div>
         <h3>Assistant Manager – Marketing</h3>
         <span>CloudThat • Oct 2025 – Present</span>
