@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Google RSA Preview Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#060606;
+    color:white;
+    overflow:hidden;
+}
+
+/* BACKGROUND */
+
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top left,#7b2ff722 0%,transparent 30%),
+    radial-gradient(circle at bottom right,#a855f722 0%,transparent 30%);
+    z-index:-1;
+}
+
+/* HEADER */
+
+.top-header{
+    position:sticky;
+    top:0;
+    z-index:999;
+    backdrop-filter:blur(14px);
+    background:rgba(6,6,6,0.75);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.header-container{
+    padding:18px 32px;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    letter-spacing:1px;
+    color:white;
+    width:fit-content;
+}
+
+.logo span{
+    color:#a855f7;
+
+    text-shadow:
+    0 0 10px #a855f7,
+    0 0 20px #9333ea,
+    0 0 40px #7e22ce;
+}
+
+/* MAIN LAYOUT */
+
+.container{
+    display:grid;
+    grid-template-columns:420px 1fr;
+    height:calc(100vh - 72px);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    border-right:1px solid rgba(255,255,255,0.08);
+    background:#0d0d0d;
+    padding:28px;
+    overflow-y:auto;
+    position:sticky;
+    top:72px;
+    height:calc(100vh - 72px);
+}
+
+.title{
+    margin-bottom:30px;
+}
+
+.title h1{
+    font-size:28px;
+    font-weight:800;
+    background:linear-gradient(90deg,#ffffff,#b983ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.title p{
+    color:#9ca3af;
+    margin-top:10px;
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* BUTTONS */
+
+.top-buttons{
+    display:flex;
+    gap:10px;
+    margin-bottom:28px;
+    position:sticky;
+    top:0;
+    background:#0d0d0d;
+    padding-bottom:18px;
+    z-index:10;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    transition:0.3s;
+    font-family:inherit;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,#9333ea,#7e22ce);
+    color:white;
+    padding:14px 18px;
+    border-radius:14px;
+    font-weight:700;
+    flex:1;
+
+    box-shadow:
+    0 0 25px rgba(147,51,234,0.35);
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    background:#161616;
+    color:white;
+    padding:14px 18px;
+    border-radius:14px;
+    font-weight:600;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.btn-secondary:hover{
+    background:#242424;
+}
+
+/* FORM */
+
+.group{
+    margin-bottom:24px;
+}
+
+.group-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.group-header span{
+    font-size:15px;
+    font-weight:600;
+}
+
+.helper{
+    font-size:12px;
+    color:#9ca3af;
+}
+
+textarea{
+    width:100%;
+    min-height:120px;
+    background:#121212;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px;
+    padding:16px;
+    color:white;
+    font-family:inherit;
+    resize:vertical;
+    font-size:14px;
+    outline:none;
+    transition:0.3s;
+    line-height:1.6;
+}
+
+textarea:focus{
+    border-color:#9333ea;
+
+    box-shadow:
+    0 0 0 4px rgba(147,51,234,0.18);
+}
+
+textarea::placeholder{
+    color:#6b7280;
+}
+
+/* NOTE */
+
+.note{
+    background:#111111;
+    border:1px solid rgba(147,51,234,0.25);
+    padding:18px;
+    border-radius:18px;
+    line-height:1.7;
+    color:#d1d5db;
+    font-size:13px;
+    margin-top:24px;
+}
+
+/* MAIN */
+
+.main{
+    padding:30px;
+    overflow-y:auto;
+    height:calc(100vh - 72px);
+}
+
+/* STATS */
+
+.stats{
+    display:flex;
+    gap:16px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+
+    position:sticky;
+    top:0;
+
+    z-index:50;
+
+    background:#060606;
+
+    padding-bottom:18px;
+}
+
+.stat{
+    background:linear-gradient(
+        135deg,
+        rgba(147,51,234,0.14),
+        rgba(17,17,17,1)
+    );
+
+    border:1px solid rgba(168,85,247,0.25);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    min-width:180px;
+
+    backdrop-filter:blur(12px);
+
+    box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 0 25px rgba(147,51,234,0.12);
+
+    transition:0.3s;
+}
+
+.stat:hover{
+    border-color:#a855f7;
+
+    box-shadow:
+    0 0 25px rgba(168,85,247,0.22);
+}
+
+.stat h3{
+    font-size:13px;
+    color:#9ca3af;
+    margin-bottom:8px;
+}
+
+.stat p{
+    font-size:30px;
+    font-weight:800;
+}
+
+/* SEARCHBAR */
+
+.searchbar{
+    background:#121212;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:999px;
+    padding:16px 22px;
+    margin-bottom:28px;
+}
+
+.searchbar input{
+    background:none;
+    border:none;
+    outline:none;
+    color:white;
+    width:100%;
+    font-size:15px;
+    font-family:inherit;
+}
+
+/* ADS */
+
+.preview-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(430px,1fr));
+    gap:20px;
+    padding-bottom:100px;
+}
+
+.google-card{
+    background:white;
+    color:black;
+    border-radius:22px;
+    padding:24px;
+
+    transition:0.3s;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.google-card:hover{
+    transform:translateY(-4px);
+}
+
+.badge{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#ecfdf3;
+    color:#15803d;
+    font-size:11px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.url{
+    color:#188038;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.headline{
+    color:#1a0dab;
+    font-size:18px;
+    line-height:1.45;
+    margin-bottom:10px;
+    font-weight:500;
+}
+
+.desc{
+    color:#4b5563;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.meta{
+    margin-top:16px;
+    font-size:12px;
+    color:#9ca3af;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#9333ea;
+    border-radius:999px;
+}
+
+/* MOBILE */
+
+@media(max-width:1100px){
+
+    body{
+        overflow:auto;
+    }
+
+    .container{
+        grid-template-columns:1fr;
+        height:auto;
+    }
+
+    .sidebar{
+        height:auto;
+        position:relative;
+        top:0;
+    }
+
+    .main{
+        height:auto;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <div class="header-container">
+
+        <div class="logo">
+            <span>Y</span>Phantom
+        </div>
+
+    </div>
+
+</header>
+
+<div class="container">
+
+    <!-- LEFT -->
+
+    <div class="sidebar">
+
+        <div class="title">
+
+            <h1>RSA Preview Generator</h1>
+
+            <p>
+                Generate every possible Google Responsive Search Ad combination instantly.
+            </p>
+
+        </div>
+
+        <!-- BUTTONS -->
+
+        <div class="top-buttons">
+
+            <button class="btn-primary" onclick="generateAds()">
+                Generate Ads
+            </button>
+
+            <button class="btn-secondary" onclick="shuffleAds()">
+                Shuffle
+            </button>
+
+            <button class="btn-secondary" onclick="clearAll()">
+                Clear
+            </button>
+
+        </div>
+
+        <!-- H1 -->
+
+        <div class="group">
+
+            <div class="group-header">
+                <span>Headline 1</span>
+                <div class="helper">One per line</div>
+            </div>
+
+            <textarea
+                id="h1"
+                placeholder="Headline 1 text 1&#10;Headline 1 text 2&#10;Headline 1 text 3"
+            ></textarea>
+
+        </div>
+
+        <!-- H2 -->
+
+        <div class="group">
+
+            <div class="group-header">
+                <span>Headline 2</span>
+                <div class="helper">One per line</div>
+            </div>
+
+            <textarea
+                id="h2"
+                placeholder="Headline 2 text 1&#10;Headline 2 text 2&#10;Headline 2 text 3"
+            ></textarea>
+
+        </div>
+
+        <!-- H3 -->
+
+        <div class="group">
+
+            <div class="group-header">
+                <span>Headline 3 (Optional)</span>
+                <div class="helper">Optional</div>
+            </div>
+
+            <textarea
+                id="h3"
+                placeholder="Headline 3 text 1&#10;Headline 3 text 2"
+            ></textarea>
+
+        </div>
+
+        <!-- DESC -->
+
+        <div class="group">
+
+            <div class="group-header">
+                <span>Primary Text (Optional)</span>
+                <div class="helper">Optional</div>
+            </div>
+
+            <textarea
+                id="desc"
+                placeholder="Primary text 1&#10;Primary text 2"
+            ></textarea>
+
+        </div>
+
+        <!-- NOTE -->
+
+        <div class="note">
+
+            <strong>How it works:</strong>
+
+            <br><br>
+
+            Every Headline 1 option combines with every Headline 2 option,
+            optional Headline 3 option, and optional Primary Text variation
+            to generate Google Responsive Search Ad previews automatically.
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="main">
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+            <div class="stat">
+                <h3>Headline 1</h3>
+                <p id="h1Count">0</p>
+            </div>
+
+            <div class="stat">
+                <h3>Headline 2</h3>
+                <p id="h2Count">0</p>
+            </div>
+
+            <div class="stat">
+                <h3>Headline 3</h3>
+                <p id="h3Count">0</p>
+            </div>
+
+            <div class="stat">
+                <h3>Total Combinations</h3>
+                <p id="comboCount">0</p>
+            </div>
+
+        </div>
+
+        <!-- SEARCH -->
+
+        <div class="searchbar">
+
+            <input
+                type="text"
+                placeholder="Search term preview..."
+            />
+
+        </div>
+
+        <!-- ADS -->
+
+        <div class="preview-grid" id="previewGrid"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function getLines(id){
+
+    return document.getElementById(id)
+        .value
+        .split('\n')
+        .map(x => x.trim())
+        .filter(x => x !== '');
+
+}
+
+function generateAds(){
+
+    const h1 = getLines('h1');
+    const h2 = getLines('h2');
+    const h3 = getLines('h3');
+    const desc = getLines('desc');
+
+    const descriptions = desc.length > 0 ? desc : [''];
+
+    document.getElementById('h1Count').innerText = h1.length;
+    document.getElementById('h2Count').innerText = h2.length;
+    document.getElementById('h3Count').innerText = h3.length;
+
+    const h3Count = h3.length > 0 ? h3.length : 1;
+
+    const total =
+        h1.length *
+        h2.length *
+        h3Count *
+        descriptions.length;
+
+    document.getElementById('comboCount').innerText = total.toLocaleString();
+
+    const grid = document.getElementById('previewGrid');
+
+    grid.innerHTML = '';
+
+    let counter = 1;
+
+    h1.forEach(first => {
+
+        h2.forEach(second => {
+
+            const headline3Options = h3.length > 0 ? h3 : [''];
+
+            headline3Options.forEach(third => {
+
+                descriptions.forEach(description => {
+
+                    const headline = third
+                    ? `${first} | ${second} | ${third}`
+                    : `${first} | ${second}`;
+
+                    const card = document.createElement('div');
+
+                    card.className = 'google-card';
+
+                    card.innerHTML = `
+                    
+                        <div class="badge">
+                            Sponsored
+                        </div>
+
+                        <div class="url">
+                            www.example.com › category
+                        </div>
+
+                        <div class="headline">
+                            ${headline}
+                        </div>
+
+                        ${
+                            description
+                            ?
+                            `<div class="desc">${description}</div>`
+                            :
+                            ''
+                        }
+
+                        <div class="meta">
+                            Combination #${counter}
+                        </div>
+
+                    `;
+
+                    grid.appendChild(card);
+
+                    counter++;
+
+                });
+
+            });
+
+        });
+
+    });
+
+}
+
+function shuffleAds(){
+
+    const grid = document.getElementById('previewGrid');
+
+    const cards = Array.from(grid.children);
+
+    cards.sort(() => Math.random() - 0.5);
+
+    grid.innerHTML = '';
+
+    cards.forEach(card => grid.appendChild(card));
+
+}
+
+function clearAll(){
+
+    document.getElementById('h1').value = '';
+    document.getElementById('h2').value = '';
+    document.getElementById('h3').value = '';
+    document.getElementById('desc').value = '';
+
+    document.getElementById('previewGrid').innerHTML = '';
+
+    document.getElementById('h1Count').innerText = '0';
+    document.getElementById('h2Count').innerText = '0';
+    document.getElementById('h3Count').innerText = '0';
+    document.getElementById('comboCount').innerText = '0';
+
+}
+
+generateAds();
+
+</script>
+
+</body>
+</html>
